@@ -2,7 +2,7 @@ package g
 
 import (
 	"context"
-	"fmt"
+
 	"strings"
 
 	"github.com/vmware/govmomi/property"
@@ -39,15 +39,15 @@ func esxiPower(ctx context.Context, c *govmomi.Client, esxi mo.HostSystem, dsWUR
 	*/
 	switch esxi.Summary.Runtime.PowerState {
 	case "poweredOff":
-		return []*MetricValue{GaugeValue("agent.power", "1.0")}
+		return []*MetricValue{GaugeValue("agent.power", 1.0)}
 	case "poweredOn":
-		return []*MetricValue{GaugeValue("agent.power", "2.0")}
+		return []*MetricValue{GaugeValue("agent.power", 2.0)}
 	case "standBy":
-		return []*MetricValue{GaugeValue("agent.power", "3.0")}
+		return []*MetricValue{GaugeValue("agent.power", 3.0)}
 	case "unknown":
-		return []*MetricValue{GaugeValue("agent.power", "4.0")}
+		return []*MetricValue{GaugeValue("agent.power", 4.0)}
 	default:
-		return []*MetricValue{GaugeValue("agent.power", "4.0")}
+		return []*MetricValue{GaugeValue("agent.power", 4.0)}
 	}
 }
 
@@ -61,15 +61,15 @@ func esxiStatus(ctx context.Context, c *govmomi.Client, esxi mo.HostSystem, dsWU
 	*/
 	switch esxi.Summary.OverallStatus {
 	case "gray":
-		return []*MetricValue{GaugeValue("agent.status", "1.0")}
+		return []*MetricValue{GaugeValue("agent.status", 1.0)}
 	case "green":
-		return []*MetricValue{GaugeValue("agent.status", "2.0")}
+		return []*MetricValue{GaugeValue("agent.status", 2.0)}
 	case "red":
-		return []*MetricValue{GaugeValue("agent.status", "3.0")}
+		return []*MetricValue{GaugeValue("agent.status", 3.0)}
 	case "yellow":
-		return []*MetricValue{GaugeValue("agent.status", "4.0")}
+		return []*MetricValue{GaugeValue("agent.status", 4.0)}
 	default:
-		return []*MetricValue{GaugeValue("agent.status", "1.0")}
+		return []*MetricValue{GaugeValue("agent.status", 1.0)}
 	}
 }
 
@@ -83,7 +83,7 @@ func esxiCPU(ctx context.Context, c *govmomi.Client, esxi mo.HostSystem, dsWURL 
 	var total = int64(esxi.Summary.Hardware.CpuMhz) * int64(esxi.Summary.Hardware.NumCpuCores)
 	totalCPU := GaugeValue("cpu.total", total*1000*1000)
 	useCPU := GaugeValue("cpu.usage.average", int64(esxi.Summary.QuickStats.OverallCpuUsage)*1000*1000)
-	usePercentCPU := GaugeValue("cpu.busy", fmt.Sprintf("%.2f", float64(esxi.Summary.QuickStats.OverallCpuUsage)/float64(total)*100))
+	usePercentCPU := GaugeValue("cpu.busy", float64(esxi.Summary.QuickStats.OverallCpuUsage)/float64(total)*100)
 	freeCPU := GaugeValue("cpu.free.average", (int64(total)-int64(esxi.Summary.QuickStats.OverallCpuUsage))*1000*1000)
 	return []*MetricValue{totalCPU, freeCPU, useCPU, usePercentCPU}
 }
@@ -95,8 +95,8 @@ func esxiMem(ctx context.Context, c *govmomi.Client, esxi mo.HostSystem, dsWURL 
 	totalMem := GaugeValue("mem.memtotal", total)
 	useMem := GaugeValue("mem.memused", int64(esxi.Summary.QuickStats.OverallMemoryUsage)*1024*1024)
 	freeMem := GaugeValue("mem.memfree", free)
-	freeMemPer := GaugeValue("mem.memfree.percent", fmt.Sprintf("%.2f", float64(free)/float64(total)*100))
-	usedMemPer := GaugeValue("mem.memused.percent", fmt.Sprintf("%.2f", float64(esxi.Summary.QuickStats.OverallMemoryUsage)/float64(total)*100))
+	freeMemPer := GaugeValue("mem.memfree.percent", float64(free)/float64(total)*100)
+	usedMemPer := GaugeValue("mem.memused.percent", float64(esxi.Summary.QuickStats.OverallMemoryUsage*1024*1024)/float64(total)*100)
 	return []*MetricValue{totalMem, useMem, freeMem, freeMemPer, usedMemPer}
 }
 

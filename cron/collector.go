@@ -6,9 +6,10 @@ import (
 	"sync"
 	"time"
 
+	"vsphere/g"
+
 	"github.com/vmware/govmomi"
 	"github.com/vmware/govmomi/vim25/mo"
-	"github.com/vsphere/g"
 )
 
 //Collect collect metrics
@@ -76,7 +77,11 @@ func collectVsphere(ctx context.Context, c *govmomi.Client, v g.VFuncsAndInterva
 		mvs[j].Timestamp = now
 		mvs[j].Endpoint = hostname
 	}
-	g.SendToTransfer(mvs)
+	if g.Config().Transfer.N9eMode {
+		go g.N9ePush(mvs)
+	} else {
+		go g.SendToTransfer(mvs)
+	}
 }
 
 func collectEsxi(ctx context.Context, c *govmomi.Client, esxi mo.HostSystem, v g.EFuncsAndInterval, cfg *g.VsphereConfig, wg *sync.WaitGroup, dsWURL *[]g.DatastoreWithURL) {
@@ -113,6 +118,9 @@ func collectEsxi(ctx context.Context, c *govmomi.Client, esxi mo.HostSystem, v g
 			x.Timestamp = now
 		}
 	}
-
-	g.SendToTransfer(mvs)
+	if g.Config().Transfer.N9eMode {
+		go g.N9ePush(mvs)
+	} else {
+		go g.SendToTransfer(mvs)
+	}
 }

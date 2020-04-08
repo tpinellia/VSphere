@@ -35,8 +35,10 @@ func DatastoreMetrics(ctx context.Context, c *govmomi.Client) (L []*MetricValue)
 	if dss != nil {
 		for _, ds := range dss {
 			tags := fmt.Sprintf("ds=%s,fstype=%s", ds.Summary.Name, ds.Summary.Type)
+			freePercent := float64(ds.Summary.FreeSpace) / float64(ds.Summary.Capacity) * 100
 			L = append(L, GaugeValue("datastore.bits.total", ds.Summary.Capacity, tags))
 			L = append(L, GaugeValue("datastore.bits.free", ds.Summary.FreeSpace, tags))
+			L = append(L, GaugeValue("datastore.free.percent", freePercent, tags))
 		}
 	}
 	return

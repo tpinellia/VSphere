@@ -2,15 +2,15 @@
     "debug": false,
     "extend": "./extend.json",
     "heartbeat": {
-        "enabled": true,
+        "enabled": false,
         "addr": "127.0.0.1:6030",
         "timeout": 1000
     },
     "transfer": {
         "enabled": true,
-        "n9eMode": false,
+        "n9eMode": true,
         "addrs": [
-            "127.0.0.1:8433"
+            "127.0.0.1:5811"
         ],
         "interval": 60,
         "timeout": 1000

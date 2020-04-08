@@ -1,5 +1,6 @@
 ### falcon-vsphere
-这是一个适用于Open-Falcon的，用于监控Vsphere及由Vsphere监管的所有esxi性能指标的agent。
+
+这是一个适用于 Open-Falcon 和 Nightingale 的，用于监控 Vsphere 及由 Vsphere 监管的所有 esxi 性能指标的 agent。
 #### 一.特性
 1. 支持多vsphere同时采集
 2. 支持vsphere与esxi监控项归并/拆分,支持自定义endpoint或监控项头部
@@ -23,6 +24,7 @@
     },
     "transfer": {
         "enabled": true,                    #是否开启Transfer
+        "n9eMode": true,                    #是否切换到n9e模式
         "addrs": [              
             "127.0.0.1:8433"                #Transfer地址,可配置多个
         ],
