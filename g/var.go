@@ -13,7 +13,7 @@ import (
 
 const (
 	//VERSION version
-	VERSION = "1.1.0"
+	VERSION = "1.1.1"
 	//LOGFILE log file
 	LOGFILE = "./var/vsphere.log"
 )

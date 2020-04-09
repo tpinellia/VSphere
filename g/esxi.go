@@ -96,7 +96,7 @@ func esxiMem(ctx context.Context, c *govmomi.Client, esxi mo.HostSystem, dsWURL 
 	useMem := GaugeValue("mem.memused", int64(esxi.Summary.QuickStats.OverallMemoryUsage)*1024*1024)
 	freeMem := GaugeValue("mem.memfree", free)
 	freeMemPer := GaugeValue("mem.memfree.percent", float64(free)/float64(total)*100)
-	usedMemPer := GaugeValue("mem.memused.percent", float64(esxi.Summary.QuickStats.OverallMemoryUsage*1024*1024)/float64(total)*100)
+	usedMemPer := GaugeValue("mem.memused.percent", float64(total-free)/float64(total)*100)
 	return []*MetricValue{totalMem, useMem, freeMem, freeMemPer, usedMemPer}
 }
 
