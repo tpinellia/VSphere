@@ -86,7 +86,7 @@ function build() {
 function pack() {
     build
     version=`./$app -v`
-    file_list="control cfg.example.json extend.json $app"
+    file_list="control cfg.example.json cfg.example.n9e.json extend.json $app"
     echo "...tar $app-$version.tar.gz <= $file_list"
     tar zcf $app-$version.tar.gz $file_list
 }
